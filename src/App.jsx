@@ -13,10 +13,14 @@ export default function App() {
 	const [keyword, setKeyword] = useState("");
 
 	const handleSearch = () => {
-		const filteredBooks = books.filter((book) =>
-			book.title.toLowerCase().includes(keyword.toLowerCase())
-		);
-		setBooks(filteredBooks);
+		if (keyword === "") {
+			return fetchBooks();
+		} else {
+			const filteredBooks = books.filter((book) =>
+				book.title.toLowerCase().includes(keyword.toLowerCase())
+			);
+			setBooks(filteredBooks);
+		}
 	};
 
 	// menampilkan buku
@@ -29,16 +33,6 @@ export default function App() {
 			console.error("Error fetching books:", error.message, error.response);
 		} finally {
 			setLoading(false);
-		}
-	};
-
-	// menambahkan buku
-	const addBook = async (book) => {
-		try {
-			const response = await axios.post(`${import.meta.env.VITE_API_BE}/books`, book);
-			console.log("Book added successfully:", response.data);
-		} catch (error) {
-			console.error("Error adding book:", error.message);
 		}
 	};
 
