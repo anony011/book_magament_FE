@@ -12,9 +12,18 @@ import {
 } from "./ui/dialog";
 
 const BookSection = ({ title, author, year }) => {
+	const handleUpdate = () => {
+		console.log("Update book", title);
+	};
+
+	const handleDelete = () => {
+		console.log("Update book", title);
+	};
+
 	return (
-		<div className="flex gap-4 items-center justify-between border w-full px-2 py-1 rounded-lg ">
+		<div className="w-full p-4 border rounded-lg shadow-sm flex gap-2 bg-gray-50 hover:bg-gray-100 transition duration-200 items-center justify-between">
 			{/* BOOK TITLE */}
+
 			<span className="flex gap-2 items-center">
 				<Button variant="outline">
 					<svg
@@ -32,9 +41,9 @@ const BookSection = ({ title, author, year }) => {
 					</svg>
 				</Button>
 				<span className="grid gap-0">
-					<h1>{title}</h1>
+					<p className="font-semibold">{title}</p>
 					<small>
-						{author}- {year}
+						{author} - {year}
 					</small>
 				</span>
 			</span>
@@ -45,7 +54,7 @@ const BookSection = ({ title, author, year }) => {
 				{/* UPDATE BOOK */}
 				<Dialog>
 					<DialogTrigger asChild>
-						<Button variant="secondary">
+						<Button variant="secondary" className="border">
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
 								fill="none"
@@ -89,7 +98,7 @@ const BookSection = ({ title, author, year }) => {
 							</div>
 						</div>
 						<DialogFooter>
-							<Button type="submit" className="w-full">
+							<Button lassName="w-full" onClick={handleUpdate}>
 								Simpan Perubahan
 							</Button>
 						</DialogFooter>
@@ -140,12 +149,10 @@ const BookSection = ({ title, author, year }) => {
 						</span>
 
 						<DialogFooter className={"flex gap- justify-center w-full items-center"}>
-							<Button type="submit" variant="destructive" className={"flex-grow"}>
+							<Button variant="destructive" className={"flex-grow"} onClick={handleDelete}>
 								Yakin
 							</Button>
-							<Button type="submit" className={"flex-grow"}>
-								Batalkan
-							</Button>
+							<Button className={"flex-grow"}>Batalkan</Button>
 						</DialogFooter>
 					</DialogContent>
 				</Dialog>
