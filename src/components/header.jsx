@@ -1,11 +1,8 @@
 const Header = () => {
 	return (
 		<header className="flex justify-between items-center bg-white p-4 shadow-md rounded-lg">
-			{/* LOGO */}
-			<div className="flex gap-2">
-				<img src="/images/logo.png" alt="logo" />
-				<h1 className="text-lg font-bold">Book Managment</h1>
-			</div>
+			<img src="logo.png" alt="logo" className="h-10 w-14 cursor-pointer" />
+			<h1 className="text-lg font-semibold">Book Managment</h1>
 		</header>
 	);
 };
