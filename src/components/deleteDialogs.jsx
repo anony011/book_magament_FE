@@ -10,16 +10,33 @@ import {
 } from "./ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
 import axios from "axios";
+import Swal from "sweetalert2";
+import { useRef } from "react";
 
 export default function DeleteBookDialog({ onBookDeleted, id, title }) {
+	const dialogCloseRef = useRef(null);
+
 	const handleDeleteBook = async () => {
 		try {
 			await axios.delete(`${import.meta.env.VITE_API_BE}/books/${id}`);
 			onBookDeleted(id);
-			alert("Buku berhasil dihapus!");
+			Swal.fire({
+				position: "top-end",
+				icon: "success",
+				title: "Buku berhasil di hapus",
+				showConfirmButton: false,
+				timer: 1500,
+			});
+			dialogCloseRef.current.click();
 		} catch (error) {
 			console.error("Error deleting book:", error);
-			alert("Gagal menghapus buku!");
+			Swal.fire({
+				position: "top-end",
+				icon: "error",
+				title: "Buku gagal di hapus",
+				showConfirmButton: false,
+				timer: 1500,
+			});
 		}
 	};
 
@@ -71,7 +88,7 @@ export default function DeleteBookDialog({ onBookDeleted, id, title }) {
 					<Button className="flex-grow" onClick={handleDeleteBook} variant="destructive">
 						Hapus
 					</Button>
-					<DialogClose asChild className="flex-grow">
+					<DialogClose asChild ref={dialogCloseRef} className="flex-grow">
 						<Button variant="outline">Batal</Button>
 					</DialogClose>
 				</DialogFooter>

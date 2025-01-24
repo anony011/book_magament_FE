@@ -5,6 +5,7 @@ import { Input } from "../ui/input";
 import { Label } from "@radix-ui/react-label";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 const LoginPage = () => {
 	const [username, setUsername] = useState("");
@@ -21,11 +22,19 @@ const LoginPage = () => {
 			});
 
 			localStorage.setItem("token", response.data.token);
-			alert("Login berhasil!");
+			Swal.fire({
+				title: "Sign in Berhasil!",
+				text: "Selamat Datang Kembali!",
+				icon: "success",
+			});
 			navigate("/dashboard");
 		} catch (error) {
 			console.error("Login gagal:", error);
-			alert("Login gagal. Periksa kembali kredensial Anda.");
+			Swal.fire({
+				title: "Sign in Gagal!",
+				text: "periksa kembali username dan passwordmu.",
+				icon: "error",
+			});
 		}
 	};
 

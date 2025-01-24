@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
 	Dialog,
 	DialogTrigger,
@@ -13,6 +13,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import axios from "axios";
 import { DialogClose } from "@radix-ui/react-dialog";
+import Swal from "sweetalert2";
 
 export default function UpdateBookDialog({
 	id,
@@ -24,6 +25,8 @@ export default function UpdateBookDialog({
 	const [title, setTitle] = useState(initialTitle);
 	const [author, setAuthor] = useState(initialAuthor);
 	const [year, setYear] = useState(initialYear);
+
+	const dialogCloseRef = useRef(null);
 
 	useEffect(() => {
 		setTitle(initialTitle);
@@ -40,14 +43,27 @@ export default function UpdateBookDialog({
 		try {
 			const updatedBook = { id, title, author, year: parseInt(year, 10) };
 			const response = await axios.put(`${import.meta.env.VITE_API_BE}/books/${id}`, updatedBook);
-			alert("Buku berhasil diperbarui!");
 			onBookUpdated(response.data);
 			setTitle("");
 			setAuthor("");
 			setYear("");
+			Swal.fire({
+				position: "top-end",
+				icon: "success",
+				title: "Data Berhasil Diperbaharui",
+				showConfirmButton: false,
+				timer: 1500,
+			});
+			dialogCloseRef.current.click();
 		} catch (error) {
 			console.error("Error update book:", error);
-			alert("Gagal memperbarui buku!");
+			Swal.fire({
+				position: "top-end",
+				icon: "error",
+				title: "Data Gagal Diperbaharui",
+				showConfirmButton: false,
+				timer: 1500,
+			});
 		}
 	};
 
@@ -120,7 +136,7 @@ export default function UpdateBookDialog({
 					<Button className="flex-grow" onClick={handleUpdateBook}>
 						Perbarui
 					</Button>
-					<DialogClose asChild className="flex-grow">
+					<DialogClose asChild ref={dialogCloseRef} className="flex-grow">
 						<Button variant="outline">Batal</Button>
 					</DialogClose>
 				</DialogFooter>

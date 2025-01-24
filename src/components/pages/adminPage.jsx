@@ -9,26 +9,26 @@ import AddBookDialog from "../addDialogs";
 const AdminPage = () => {
 	const [loading, setLoading] = useState(false);
 	const [books, setBooks] = useState([]);
-
 	const [keyword, setKeyword] = useState("");
 
+	// Cari buku berdasarkan keyword
 	const handleSearch = () => {
 		if (keyword === "") {
-			return fetchBooks();
+			return fetchBooks(); // Jika kosong, ambil ulang semua buku
 		} else {
 			const filteredBooks = books.filter((book) =>
 				book.title.toLowerCase().includes(keyword.toLowerCase())
 			);
-			setBooks(filteredBooks);
+			setBooks(filteredBooks); // Update dengan hasil pencarian
 		}
 	};
 
-	// menampilkan buku
+	// Ambil daftar buku dari server
 	const fetchBooks = async () => {
 		setLoading(true);
 		try {
 			const response = await axios.get(`${import.meta.env.VITE_API_BE}/books`);
-			setBooks(response.data);
+			setBooks(response.data); // Menyimpan data buku terbaru
 		} catch (error) {
 			console.error("Error fetching books:", error.message, error.response);
 		} finally {
@@ -36,20 +36,23 @@ const AdminPage = () => {
 		}
 	};
 
-	// menghapus buku
+	// Hapus buku
 	const handleDeleteBook = (bookId) => {
 		setBooks((prevBooks) => prevBooks.filter((book) => book.book_id !== bookId));
 	};
 
-	// memperbarui buku
+	// Update buku
 	const handleUpdateBook = (updatedBook) => {
-		setBooks((prevBooks) =>
-			prevBooks.map((book) => (book.book_id === updatedBook.book_id ? updatedBook : book))
-		);
+		fetchBooks();
+	};
+
+	// Tambah buku
+	const handleAddBook = (newBook) => {
+		fetchBooks(); // Menambahkan buku baru ke state
 	};
 
 	useEffect(() => {
-		fetchBooks();
+		fetchBooks(); // Ambil data buku saat komponen pertama kali dimuat
 	}, []);
 
 	return (
@@ -64,11 +67,8 @@ const AdminPage = () => {
 						onChange={(e) => setKeyword(e.target.value)}
 					/>
 					<span className="flex items-center gap-1">
-						{/* Hapus pemanggilan langsung handleSearch */}
 						<Button onClick={handleSearch}>Cari</Button>
-						<AddBookDialog
-							onBookAdded={(newBook) => setBooks((prevBooks) => [...prevBooks, newBook])}
-						/>
+						<AddBookDialog onBookAdded={handleAddBook} />
 					</span>
 				</div>
 				{/* END CONTENT HEAD */}
@@ -79,7 +79,7 @@ const AdminPage = () => {
 						<h2 className="text-xl font-semibold mb-4">Daftar Buku</h2>
 						<ul className="w-full space-y-4">
 							{books.map((book) => (
-								<li key={book.id}>
+								<li key={book.book_id}>
 									<BookSection
 										author={book.author}
 										title={book.title}

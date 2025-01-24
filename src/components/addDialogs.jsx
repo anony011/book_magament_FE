@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
 	Dialog,
 	DialogTrigger,
@@ -13,11 +13,14 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import axios from "axios";
 import { DialogClose } from "@radix-ui/react-dialog";
+import Swal from "sweetalert2";
 
 export default function AddBookDialog({ onBookAdded }) {
 	const [title, setTitle] = useState("");
 	const [author, setAuthor] = useState("");
 	const [year, setYear] = useState("");
+
+	const dialogCloseRef = useRef(null);
 
 	const handleAddBook = async () => {
 		if (!title || !author || !year) {
@@ -28,11 +31,19 @@ export default function AddBookDialog({ onBookAdded }) {
 		try {
 			const newBook = { title, author, year: parseInt(year, 10) };
 			const response = await axios.post(`${import.meta.env.VITE_API_BE}/books`, newBook);
-			alert("Buku berhasil ditambahkan!");
 			onBookAdded(response.data);
 			setTitle("");
 			setAuthor("");
 			setYear("");
+			Swal.fire({
+				position: "top-end",
+				icon: "success",
+				title: "Data Berhasil Ditambahkan",
+				showConfirmButton: false,
+				timer: 1500,
+			});
+
+			dialogCloseRef.current.click();
 		} catch (error) {
 			console.error("Error adding book:", error);
 			alert("Gagal menambahkan buku!");
@@ -96,7 +107,7 @@ export default function AddBookDialog({ onBookAdded }) {
 					<Button className="flex-grow" onClick={handleAddBook}>
 						Tambahkan
 					</Button>
-					<DialogClose asChild className="flex-grow">
+					<DialogClose asChild ref={dialogCloseRef} className="flex-grow">
 						<Button variant="outline">Batal</Button>
 					</DialogClose>
 				</DialogFooter>

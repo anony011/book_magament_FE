@@ -1,23 +1,8 @@
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import {
-	Dialog,
-	DialogContent,
-	DialogDescription,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
-} from "./ui/dialog";
 import DeleteBookDialog from "./deleteDialogs";
 import UpdateBookDialog from "./updateDialogs";
 
 const BookSection = ({ title, author, year, id, handleDeleteBook, handleUpdateBook }) => {
-	const handleUpdate = () => {
-		console.log("Update book", title);
-	};
-
 	return (
 		<div className="w-full p-4 border rounded-lg shadow-sm flex gap-2 bg-gray-50 hover:bg-gray-100 transition duration-200 items-center justify-between">
 			{/* BOOK TITLE */}
