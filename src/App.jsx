@@ -37,23 +37,15 @@ export default function App() {
 	};
 
 	// menghapus buku
-	const deleteBook = async (id) => {
-		try {
-			const response = await axios.delete(`${import.meta.env.VITE_API_BE}/books/${id}`);
-			console.log("Book deleted successfully:", response.data);
-		} catch (error) {
-			console.error("Error deleting book:", error.message);
-		}
+	const handleDeleteBook = (bookId) => {
+		setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
 	};
 
 	// memperbarui buku
-	const updateBook = async (id, updatedBook) => {
-		try {
-			const response = await axios.put(`${import.meta.env.VITE_API_BE}/books/${id}`, updatedBook);
-			console.log("Book updated successfully:", response.data);
-		} catch (error) {
-			console.error("Error updating book:", error.message);
-		}
+	const handleUpdateBook = (updatedBook) => {
+		setBooks((prevBooks) =>
+			prevBooks.map((book) => (book.id === updatedBook.id ? updatedBook : book))
+		);
 	};
 
 	useEffect(() => {
@@ -88,7 +80,14 @@ export default function App() {
 						<ul className="w-full space-y-4">
 							{books.map((book) => (
 								<li key={book.id}>
-									<BookSection author={book.author} title={book.title} year={book.year} />
+									<BookSection
+										author={book.author}
+										title={book.title}
+										year={book.year}
+										id={book.id}
+										handleDeleteBook={handleDeleteBook}
+										handleUpdateBook={handleUpdateBook}
+									/>
 								</li>
 							))}
 						</ul>
