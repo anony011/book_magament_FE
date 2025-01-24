@@ -38,13 +38,13 @@ const AdminPage = () => {
 
 	// menghapus buku
 	const handleDeleteBook = (bookId) => {
-		setBooks((prevBooks) => prevBooks.filter((book) => book.id !== bookId));
+		setBooks((prevBooks) => prevBooks.filter((book) => book.book_id !== bookId));
 	};
 
 	// memperbarui buku
 	const handleUpdateBook = (updatedBook) => {
 		setBooks((prevBooks) =>
-			prevBooks.map((book) => (book.id === updatedBook.id ? updatedBook : book))
+			prevBooks.map((book) => (book.book_id === updatedBook.book_id ? updatedBook : book))
 		);
 	};
 
@@ -84,7 +84,7 @@ const AdminPage = () => {
 										author={book.author}
 										title={book.title}
 										year={book.year}
-										id={book.id}
+										id={book.book_id}
 										handleDeleteBook={handleDeleteBook}
 										handleUpdateBook={handleUpdateBook}
 									/>

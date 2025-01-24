@@ -3,17 +3,14 @@ import Header from "../header";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "@radix-ui/react-label";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const LoginPage = () => {
 	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		// Add your login logic here
-		console.log("Username:", username);
-		console.log("Password:", password);
-	};
+	const navigate = useNavigate();
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -37,7 +34,7 @@ const LoginPage = () => {
 			<Header />
 			<div className="flex justify-center items-center h-[55rem]">
 				<form
-					onSubmit={handleSubmit}
+					onSubmit={handleLogin}
 					className="bg-white shadow-lg rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
 					<h1 className="text-center text-3xl font-bold my-3">Welcome!</h1>
 					<div className="mb-4">
@@ -63,7 +60,7 @@ const LoginPage = () => {
 						/>
 					</div>
 					<div className="flex items-center justify-between w-full">
-						<Button type="sumbit" className="flex-grow">
+						<Button type="submit" className="flex-grow">
 							Sign In
 						</Button>
 					</div>
