@@ -4,6 +4,7 @@ import Header from "./components/header";
 import { Button } from "./components/ui/button";
 import { Input } from "./components/ui/input";
 import { useEffect, useState } from "react";
+import AddBookDialog from "./components/addDialogs";
 
 export default function App() {
 	const [loading, setLoading] = useState(false);
@@ -18,6 +19,7 @@ export default function App() {
 		setBooks(filteredBooks);
 	};
 
+	// menampilkan buku
 	const fetchBooks = async () => {
 		setLoading(true);
 		try {
@@ -27,6 +29,36 @@ export default function App() {
 			console.error("Error fetching books:", error.message, error.response);
 		} finally {
 			setLoading(false);
+		}
+	};
+
+	// menambahkan buku
+	const addBook = async (book) => {
+		try {
+			const response = await axios.post(`${import.meta.env.VITE_API_BE}/books`, book);
+			console.log("Book added successfully:", response.data);
+		} catch (error) {
+			console.error("Error adding book:", error.message);
+		}
+	};
+
+	// menghapus buku
+	const deleteBook = async (id) => {
+		try {
+			const response = await axios.delete(`${import.meta.env.VITE_API_BE}/books/${id}`);
+			console.log("Book deleted successfully:", response.data);
+		} catch (error) {
+			console.error("Error deleting book:", error.message);
+		}
+	};
+
+	// memperbarui buku
+	const updateBook = async (id, updatedBook) => {
+		try {
+			const response = await axios.put(`${import.meta.env.VITE_API_BE}/books/${id}`, updatedBook);
+			console.log("Book updated successfully:", response.data);
+		} catch (error) {
+			console.error("Error updating book:", error.message);
 		}
 	};
 
@@ -48,7 +80,9 @@ export default function App() {
 					<span className="flex items-center gap-1">
 						{/* Hapus pemanggilan langsung handleSearch */}
 						<Button onClick={handleSearch}>Cari</Button>
-						<Button>Tambah</Button>
+						<AddBookDialog
+							onBookAdded={(newBook) => setBooks((prevBooks) => [...prevBooks, newBook])}
+						/>
 					</span>
 				</div>
 				{/* END CONTENT HEAD */}
